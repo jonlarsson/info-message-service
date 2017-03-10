@@ -1,9 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-module.exports = function setupHttp({port, routes}) {
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const googleCallbackPath = "/api/auth/google/callback";
+module.exports = function setupHttp({port, routes, authentication, sessionSecret}) {
     const app = express();
 
+    app.use(cookieParser());
+    app.use(session({ secret: sessionSecret }));
     app.use(bodyParser.json());
+    authentication.applyMiddleware(app);
 
     function errorHandler(req, res, error) {
         res.status(500).send(error);
@@ -32,13 +40,18 @@ module.exports = function setupHttp({port, routes}) {
        }
     }
 
+    function userIn(req) {
+        return req.session && req.session.passport && req.session.passport.user;
+    }
+
     routes.forEach(route => {
         switch (route.method) {
             case "GET":
                 app.get(route.path, nocache, function (req, res) {
                     route.handler({
                         pathParams: req.params,
-                        queryParams: req.query
+                        queryParams: req.query,
+                        user: userIn(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));
@@ -49,7 +62,8 @@ module.exports = function setupHttp({port, routes}) {
                     route.handler({
                         pathParams: req.params,
                         queryParams: req.query,
-                        body: req.body
+                        body: req.body,
+                        user: userIn(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));
@@ -60,7 +74,8 @@ module.exports = function setupHttp({port, routes}) {
                     route.handler({
                         pathParams: req.params,
                         queryParams: req.query,
-                        body: req.body
+                        body: req.body,
+                        user: userIn(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));
@@ -70,6 +85,8 @@ module.exports = function setupHttp({port, routes}) {
                 throw new Error("unknown method " + route.method);
         }
     });
+
+    authentication.applyRoutes(app);
 
     app.listen(port, function () {
         console.log('Example app listening on port ' + port)

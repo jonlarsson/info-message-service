@@ -1,20 +1,48 @@
 const uuid = require('node-uuid');
 module.exports = function domain({storage, serviceScriptTemplate}) {
-
-    function listServices() {
-        return storage.listServices();
+    function authorize(user) {
+        if (!user || !user.id) {
+            throw new Error("User is required");
+        }
     }
 
-    function createService(serviceData) {
+    function authorizeAccessToService(user, serviceId) {
+        authorize(user);
+        if (!serviceId) {
+            throw new Error("Service id is required");
+        }
+        return storage.userHasAccessToService(user, serviceId)
+            .then(hasAccess => {
+                if (!hasAccess) {
+                    throw new Error("User is not authorized for that service");
+                }
+                return true;
+            })
+    }
+
+    function listServices(user) {
+        if (!user || !user.id) {
+            return Promise.resolve([]);
+        } else {
+            return storage.listServices(user);
+        }
+    }
+
+    function createService(user, serviceData) {
+        authorize(user);
         const completeService = {
             id: uuid.v4(),
-            name: serviceData.name
+            name: serviceData.name,
+            users: [
+                user.id
+            ]
         };
         return storage.addService(completeService);
     }
 
-    function getService(id) {
-        return storage.getService(id);
+    function getService(user, id) {
+        return authorizeAccessToService(user, id)
+            .then(() => storage.getService(id));
     }
 
     function getServiceScript(id) {
@@ -26,12 +54,34 @@ module.exports = function domain({storage, serviceScriptTemplate}) {
         return storage.listMessages(serviceId);
     }
 
-    function createMessage(serviceId, messageData) {
+    function createMessage(user, serviceId, messageData) {
         const message = {
             id: uuid.v4(),
             content: messageData.content
         };
-        return storage.addMessage(serviceId, message);
+        return authorizeAccessToService(user, serviceId)
+            .then(() => storage.addMessage(serviceId, message));
+    }
+
+    function establishUser(authentication) {
+        if (!authentication.provider || !authentication.externalId) {
+            throw new Error("Provider and external id is required");
+        }
+        return storage.findUserByExternalId(authentication.provider, authentication.externalId)
+            .then(user => {
+                if (user) {
+                    return user;
+                } else {
+                    const newUser = {
+                        id: uuid.v4(),
+                        name: authentication.name,
+                        externalIds: {
+                            [authentication.provider]: authentication.externalId
+                        }
+                    };
+                    return storage.addUser(newUser);
+                }
+            })
     }
 
     return {
@@ -40,6 +90,7 @@ module.exports = function domain({storage, serviceScriptTemplate}) {
         getService,
         getServiceScript,
         listMessages,
-        createMessage
+        createMessage,
+        establishUser
     }
 };

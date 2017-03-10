@@ -5,18 +5,18 @@ module.exports = function routing(domain) {
         {
             path: "/api/services",
             method: "GET",
-            handler: () => domain.listServices()
+            handler: ({user}) => domain.listServices(user)
         },
         {
             path: "/api/services",
             method: "POST",
-            handler: ({body}) => domain.createService(body)
+            handler: ({body, user}) => domain.createService(user, body)
         },
         {
             path: "/api/services/:id",
             method: "GET",
-            handler: ({pathParams}) => {
-                return domain.getService(pathParams.id)
+            handler: ({pathParams, user}) => {
+                return domain.getService(user, pathParams.id)
             }
         },
         {
@@ -37,8 +37,8 @@ module.exports = function routing(domain) {
         {
             path: "/api/services/:id/messages",
             method: "POST",
-            handler: ({pathParams, body}) => {
-                return domain.createMessage(pathParams.id, body);
+            handler: ({pathParams, body, user}) => {
+                return domain.createMessage(user, pathParams.id, body);
             }
         }
     ];

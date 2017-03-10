@@ -1,7 +1,10 @@
 module.exports = function storage() {
     const services = [{
         id: "cf5d2ef2-fa1b-4abf-b803-e87a5fecffb",
-        name: "Admin backend itself"
+        name: "Admin backend itself",
+        users: [
+            "cf5d2ef2-fa1b-4abf-b803-e87a5fecff2"
+        ]
     }].map(obj => JSON.stringify(obj));
 
     const messages = {
@@ -10,12 +13,23 @@ module.exports = function storage() {
         ]
     };
 
-    function listServices() {
-        return Promise.resolve(services.map(serviceJson => JSON.parse(serviceJson)));
+    const users = [
+        JSON.stringify({
+            id: "cf5d2ef2-fa1b-4abf-b803-e87a5fecff2",
+            externalIds: {
+                google: "104406522336369958371"
+            }
+        })
+    ];
+
+    function listServices(user) {
+        return Promise.resolve(services
+            .map(serviceJson => JSON.parse(serviceJson))
+            .filter(service => service.users.some(userId => user.id === userId)));
     }
 
     function addService(service) {
-        if (!service || !service.id) {
+        if (!service || !service.id || !service.users || !service.users.length) {
             return Promise.reject({error: "idRequired"});
         }
         services.push(JSON.stringify(service));
@@ -49,11 +63,35 @@ module.exports = function storage() {
         return Promise.resolve(message);
     }
 
+    function findUserByExternalId(provider, externalId) {
+        if (!externalId) {
+            return Promise.reject({error: "idRequired"});
+        }
+        const result = users
+            .map(userJson => JSON.parse(userJson))
+            .filter(user => user.externalIds[provider] && user.externalIds[provider] === externalId)
+            .pop();
+        return Promise.resolve(result);
+    }
+
+    function addUser(user) {
+        users.push(JSON.stringify(user));
+        return Promise.resolve(user);
+    }
+
+    function userHasAccessToService(user, serviceId) {
+        return getService(serviceId)
+            .then(service => service.users.some(userId => user.id === userId));
+    }
+
     return {
         listServices,
         addService,
         getService,
         listMessages,
-        addMessage
+        addMessage,
+        findUserByExternalId,
+        addUser,
+        userHasAccessToService
     }
 };
