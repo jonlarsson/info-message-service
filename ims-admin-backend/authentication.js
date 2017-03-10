@@ -42,6 +42,10 @@ module.exports = function authentication({googleConfig, publicUrl, establishUser
             function(req, res) {
                 res.redirect('/');
             });
+
+        app.get('/api/auth/user', function (req, res) {
+            res.json(userFromRequest(req) || {});
+        });
     }
 
     function userFromRequest(req) {

@@ -3,7 +3,7 @@ import {ServiceList} from "./ServiceList";
 import {CreateServiceForm} from "./CreateServiceForm";
 import {SendMessageForm} from "./SendMessageForm";
 import {MessageList} from "./MessageList";
-import {listServices, createService, createMessage, listMessages} from "./backendApi";
+import {listServices, createService, createMessage, listMessages, getUser} from "./backendApi";
 
 class App extends Component {
 
@@ -11,10 +11,12 @@ class App extends Component {
         super(props);
 
         this.state = {
-            services: []
+            services: [],
+            user: {}
         };
 
         listServices().then(services => this.setState({services}));
+        getUser().then(user => this.setState({user}));
     }
 
     onCreateService = (serviceData) => {
@@ -59,6 +61,9 @@ class App extends Component {
                     <h2><a href="" onClick={this.backToList}>&lt;=</a> {this.state.selectedService.name}</h2>
                     <MessageList messages={this.state.messages}/>
                     <SendMessageForm onSubmit={this.onSendMessage}/>
+                </div>}
+                {!this.state.user.id && <div>
+                    <a href="/api/auth/google">Logga in med google</a>
                 </div>}
             </div>
         );

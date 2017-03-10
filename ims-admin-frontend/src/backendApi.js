@@ -16,3 +16,7 @@ export function listMessages(serviceId) {
 export function createMessage(serviceId, messageData) {
     return axios.post("/api/services/" + serviceId + "/messages", messageData).then(response => response.data);
 }
+
+export function getUser() {
+    return axios.get("/api/auth/user").then(response => response.data);
+}
