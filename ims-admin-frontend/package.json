@@ -3,7 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.9.0"
+    "babel-core": "^6.7.2",
+    "babel-eslint": "^7.1.0",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-object-rest-spread": "^6.20.2",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.5.0",
+    "css-loader": "^0.26.0",
+    "file-loader": "^0.9.0",
+    "html-webpack-plugin": "^2.24.0",
+    "http-proxy": "^1.16.2",
+    "node-sass": "^3.13.0",
+    "sass-loader": "^4.0.2",
+    "source-map-loader": "^0.1.5",
+    "style-loader": "^0.13.1",
+    "sw-precache": "^4.3.0",
+    "webpack": "^2.1.0-beta.26",
+    "webpack-dev-server": "^2.1.0-beta.10"
   },
   "dependencies": {
     "axios": "^0.15.3",
@@ -12,10 +29,7 @@
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:3003"
+    "dist": "webpack --config webpack.prod.config.js",
+    "serve": "webpack-dev-server --content-base ./dist --inline"
+  }
 }
