@@ -19,7 +19,7 @@ module.exports = function domain({storage, serviceScriptTemplate}) {
 
     function getServiceScript(id) {
         return storage.listMessages(id)
-            .then(messages => serviceScriptTemplate.replace("__MESSAGES_TO_SHOW_", JSON.stringify(messages)));
+            .then(messages => serviceScriptTemplate.replace("\"__MESSAGES_TO_SHOW_\"", JSON.stringify(messages)));
     }
 
     function listMessages(serviceId) {

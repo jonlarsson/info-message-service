@@ -5,7 +5,7 @@ const setupDomain = require('./domain');
 const setupStorage = require('./storage');
 const setupHttp = require('./setup-http');
 
-const serviceScriptTemplate = fs.readFileSync(path.resolve(__dirname, "service-script-template.js")).toString();
+const serviceScriptTemplate = fs.readFileSync(path.resolve(__dirname, "generated/service-script-template.js")).toString();
 
 // Layers and DI yeah!!
 const storage = setupStorage();
