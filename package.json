@@ -4,5 +4,9 @@
   "scripts": {
     "postinstall": "cd ims-admin-backend && npm install && cd ../ims-admin-frontend && npm install && npm run dist && mv dist ../ims-admin-backend/generated/frontend",
     "start": "cd ims-admin-backend && npm run start"
+  },
+  "engines": {
+    "node": "6.9.x",
+    "npm": "4.0.x"
   }
 }
