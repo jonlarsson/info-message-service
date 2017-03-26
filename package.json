@@ -2,9 +2,8 @@
   "name": "info-message-service",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "cd ims-admin-backend && npm install && cd ../ims-admin-frontend && npm install --dev",
-    "start": "cd ims-admin-backend && npm run start",
-    "poststart": "cd ims-admin-frontend && npm run dist && mv dist ../ims-admin-backend/generated/frontend"
+    "postinstall": "cd ims-admin-backend && npm install && cd ../ims-admin-frontend && npm install --dev && npm run dist && mkdir -p ../ims-admin-backend/generated && mv dist ../ims-admin-backend/generated/frontend",
+    "start": "cd ims-admin-backend && npm run start"
   },
   "engines": {
     "node": "6.9.x",
