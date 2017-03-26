@@ -5,13 +5,14 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const googleCallbackPath = "/api/auth/google/callback";
-module.exports = function setupHttp({port, routes, authentication, sessionSecret}) {
+module.exports = function setupHttp({port, routes, authentication, sessionSecret, apiDocumentation}) {
     const app = express();
 
     app.use(cookieParser());
     app.use(session({ secret: sessionSecret }));
     app.use(bodyParser.json());
     authentication.applyMiddleware(app);
+    apiDocumentation.applyMiddleware(app);
 
     function errorHandler(req, res, error) {
         res.status(500).send(error);

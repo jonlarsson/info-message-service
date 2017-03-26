@@ -5,6 +5,7 @@ const setupDomain = require('./domain');
 const setupStorage = require('./storage');
 const setupAuthentication = require('./authentication');
 const setupHttp = require('./setup-http');
+const apiDocumentation = require('./api-documentation');
 
 const serviceScriptTemplate = fs.readFileSync(path.resolve(__dirname, "generated/service-script-template.js")).toString();
 
@@ -29,5 +30,5 @@ const storage = setupStorage();
 const domain = setupDomain({storage: storage, serviceScriptTemplate});
 const routes = routing(domain);
 const authentication = setupAuthentication({publicUrl, googleConfig, establishUser: domain.establishUser, });
-setupHttp({port: port, routes, sessionSecret, authentication});
+setupHttp({port: port, routes, sessionSecret, authentication, apiDocumentation});
 

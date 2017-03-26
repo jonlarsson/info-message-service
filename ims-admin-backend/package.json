@@ -2,6 +2,7 @@
   "name": "ims-admin-backend",
   "version": "0.0.1",
   "description": "This is where we will allow service owners to publish messages",
+  "main": "service.js",
   "scripts": {
     "start": "node service.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -29,6 +30,8 @@
     "sass-loader": "^4.0.2",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
+    "swagger-jsdoc": "^1.9.2",
+    "swagger-ui-express": "^1.0.5",
     "webpack": "^2.1.0-beta.26"
   }
 }
