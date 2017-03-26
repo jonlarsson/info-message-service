@@ -2,7 +2,8 @@
   "name": "info-message-service",
   "version": "0.0.1",
   "scripts": {
-    "postinstall": "cd ims-admin-backend && npm install",
+    "postinstall": "cd ims-admin-backend && npm install && cd ../ims-admin-frontend && npm install",
+    "prestart": "cd ims-admin-frontend && npm run dist && mv dist ../ims-admin-backend/generated/frontend",
     "start": "cd ims-admin-backend && npm run start"
   }
 }

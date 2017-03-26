@@ -89,6 +89,8 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
 
     authentication.applyRoutes(app);
 
+    app.use(express.static('./generated/frontend'));
+
     app.listen(port, function () {
         console.log('Example app listening on port ' + port)
     });
