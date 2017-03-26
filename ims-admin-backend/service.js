@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const routing = require('./routing');
 const setupDomain = require('./domain');
-const setupStorage = require('./pg-storage');
+const setupStorage = require('./storage');
 const setupAuthentication = require('./authentication');
 const setupHttp = require('./setup-http');
 
