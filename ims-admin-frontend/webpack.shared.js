@@ -23,7 +23,7 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Skrivning.se - Elev',
+            title: 'Info message service',
             template: "./src/index-template.ejs"
         })
     ]
