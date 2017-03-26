@@ -1,5 +1,8 @@
 {
+  "name": "info-message-service",
+  "version": "0.0.1",
   "scripts": {
-    "postinstall": "cd ims-admin-backend && npm install"
+    "postinstall": "cd ims-admin-backend && npm install",
+    "start": "cd ims-admin-backend && npm run start"
   }
 }
