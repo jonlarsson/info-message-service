@@ -11,6 +11,7 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
     app.use(cookieParser());
     app.use(session({ secret: sessionSecret }));
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
     authentication.applyMiddleware(app);
     apiDocumentation.applyMiddleware(app);
 
@@ -41,10 +42,6 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
        }
     }
 
-    function userIn(req) {
-        return req.session && req.session.passport && req.session.passport.user;
-    }
-
     routes.forEach(route => {
         switch (route.method) {
             case "GET":
@@ -52,7 +49,7 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
                     route.handler({
                         pathParams: req.params,
                         queryParams: req.query,
-                        user: userIn(req)
+                        user: authentication.userFromRequest(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));
@@ -64,7 +61,7 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
                         pathParams: req.params,
                         queryParams: req.query,
                         body: req.body,
-                        user: userIn(req)
+                        user: authentication.userFromRequest(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));
@@ -76,7 +73,7 @@ module.exports = function setupHttp({port, routes, authentication, sessionSecret
                         pathParams: req.params,
                         queryParams: req.query,
                         body: req.body,
-                        user: userIn(req)
+                        user: authentication.userFromRequest(req)
                     })
                         .then(result => responderFor(route)(res, result))
                         .catch(errorHandler.bind(null, req, res));

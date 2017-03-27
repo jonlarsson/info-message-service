@@ -17,7 +17,7 @@ module.exports = function storage() {
         JSON.stringify({
             id: "cf5d2ef2-fa1b-4abf-b803-e87a5fecff2",
             externalIds: {
-                google: "104406522336369958371"
+                mock: "YWRtaW4="
             }
         })
     ];

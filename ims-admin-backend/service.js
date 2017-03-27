@@ -2,26 +2,16 @@ const fs = require("fs");
 const path = require("path");
 const routing = require('./routing');
 const setupDomain = require('./domain');
-const setupStorage = require('./storage');
-const setupAuthentication = require('./authentication');
+const setupStorage = require('./mock-storage');
+const setupAuthentication = require('./mock-authentication');
 const setupHttp = require('./setup-http');
 const apiDocumentation = require('./api-documentation');
+const requiredEnvVariable = require('./required-env-variable');
 
 const serviceScriptTemplate = fs.readFileSync(path.resolve(__dirname, "generated/service-script-template.js")).toString();
 
-function requiredEnvVariable(variableName) {
-    if (!process.env[variableName]) {
-        throw new Error("Environment variable " + variableName);
-    }
-    return process.env[variableName];
-}
-
-const sessionSecret = requiredEnvVariable("SESSION_SECRET");
-const publicUrl = requiredEnvVariable("PUBLIC_URL");
-const googleConfig = {
-    clientID: requiredEnvVariable("GOOGLE_CLIENT_ID"),
-    clientSecret: requiredEnvVariable("GOOGLE_CLIENT_SECRET")
-};
+const publicUrl = requiredEnvVariable("PUBLIC_URL", "http://localhost:3000");
+const sessionSecret = requiredEnvVariable("SESSION_SECRET", "secretcat");
 
 const port = process.env.PORT || 3003;
 
@@ -29,6 +19,6 @@ const port = process.env.PORT || 3003;
 const storage = setupStorage();
 const domain = setupDomain({storage: storage, serviceScriptTemplate});
 const routes = routing(domain);
-const authentication = setupAuthentication({publicUrl, googleConfig, establishUser: domain.establishUser, });
+const authentication = setupAuthentication({publicUrl, establishUser: domain.establishUser, });
 setupHttp({port: port, routes, sessionSecret, authentication, apiDocumentation});
 

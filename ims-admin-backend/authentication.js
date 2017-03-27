@@ -1,8 +1,14 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const requiredEnvVariable = require('./required-env-variable');
 const googleCallbackPath = "/api/auth/google/callback";
 
-module.exports = function authentication({googleConfig, publicUrl, establishUser}) {
+const googleConfig = {
+    clientID: requiredEnvVariable("GOOGLE_CLIENT_ID"),
+    clientSecret: requiredEnvVariable("GOOGLE_CLIENT_SECRET")
+};
+
+module.exports = function authentication({publicUrl, establishUser}) {
     passport.serializeUser(function(user, done) {
         done(null, user);
     });
