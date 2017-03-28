@@ -21,3 +21,5 @@ yarn-error.log*
 *.iml
 
 generated
+
+/ims-admin-frontend-vue/dist
