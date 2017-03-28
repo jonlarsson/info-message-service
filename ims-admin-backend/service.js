@@ -19,6 +19,6 @@ const port = process.env.PORT || 3003;
 const storage = setupStorage();
 const domain = setupDomain({storage: storage, serviceScriptTemplate});
 const routes = routing(domain);
-const authentication = setupAuthentication({publicUrl, establishUser: domain.establishUser, });
+const authentication = setupAuthentication({publicUrl, establishUser: domain.establishUser,});
 setupHttp({port: port, routes, sessionSecret, authentication, apiDocumentation});
 
