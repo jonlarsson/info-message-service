@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <service-list></service-list>
+    <a href="/api/auth/google">Logga in</a>
   </div>
 </template>
 
 <script>
 import Hello from './components/Hello'
+import ServiceList from './components/ServiceList'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    Hello,
+    ServiceList
   }
 }
 
