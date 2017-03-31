@@ -39,7 +39,7 @@ module.exports = function storage() {
   function getService(serviceId) {
     const service = services
         .map(serviceJson => JSON.parse(serviceJson))
-        .filter(service => service.id = serviceId).pop();
+        .filter(service => service.id === serviceId).pop();
     if (!service) {
       return Promise.reject({error: "notFound"});
     } else {

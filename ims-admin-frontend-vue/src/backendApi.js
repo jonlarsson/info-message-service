@@ -4,7 +4,9 @@ export function listServices() {
   return axios.get("/api/services").then(response => response.data);
 }
 
-
+export function getService(serviceId) {
+  return axios.get("/api/services/" + serviceId).then(response => response.data);
+}
 export function createService(serviceData) {
   return axios.post("/api/services", serviceData).then(response => response.data);
 }

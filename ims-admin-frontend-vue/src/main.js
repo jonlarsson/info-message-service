@@ -33,5 +33,5 @@ const router = new VueRouter({
 /* eslint-disable no-new */
 new Vue({
   router,
-  template: `<div id="app"><router-view class="view"></router-view></div>`
+  template: `<div id="app"><router-view class="view"></router-view><a href="/api/auth/google">Logga in</a></div>`
 }).$mount("#app");
